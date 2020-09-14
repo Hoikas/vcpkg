@@ -1356,6 +1356,7 @@ python2:x64-uwp=fail
 python3:arm64-windows=fail
 python3:arm-uwp=fail
 python3:x64-uwp=fail
+python3:x64-windows-static=fail
 qhull:x64-uwp=fail
 qhull:arm-uwp=fail
 qpid-proton:arm-uwp=fail
