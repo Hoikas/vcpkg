@@ -7,23 +7,28 @@ vcpkg_from_github(
 )
 
 vcpkg_find_acquire_program(PYTHON3)
-get_filename_component(PYPATH ${PYTHON3} PATH)
-vcpkg_add_to_path("${PYPATH}")
+
+# pybind master allows opting into the builtin cmake find module with -DPYBIND11_FINDPYTHON-ON.
+# When the upstream port is updated, remove all of this and change the options to:
+# -DPYBIND11_TEST=OFF -DPYBIND11_FINDPYTHON=ON
+find_library(PYTHON_LIBRARY_DEBUG NAMES python38_d python3.8_d PATHS "${CURRENT_INSTALLED_DIR}/debug/lib" NO_DEFAULT_PATH)
+find_library(PYTHON_LIBRARY_RELEASE NAMES python38 python3.8 PATHS "${CURRENT_INSTALLED_DIR}/lib" NO_DEFAULT_PATH)
 
 vcpkg_configure_cmake(
     SOURCE_PATH ${SOURCE_PATH}
     PREFER_NINJA
     OPTIONS
         -DPYBIND11_TEST=OFF
+        -DPYTHON_EXECUTABLE:FILEPATH=${PYTHON3}
         -DPYTHONLIBS_FOUND=ON
         -DPYTHON_INCLUDE_DIRS=${CURRENT_INSTALLED_DIR}/include
         -DPYTHON_MODULE_EXTENSION=.dll
     OPTIONS_RELEASE
         -DPYTHON_IS_DEBUG=OFF
-        -DPYTHON_LIBRARIES=${CURRENT_INSTALLED_DIR}/lib/python36.lib
+        -DPYTHON_LIBRARIES=${PYTHON_LIBRARY_DEBUG}
     OPTIONS_DEBUG
         -DPYTHON_IS_DEBUG=ON
-        -DPYTHON_LIBRARIES=${CURRENT_INSTALLED_DIR}/debug/lib/python36_d.lib
+        -DPYTHON_LIBRARIES=${PYTHON_LIBRARY_RELEASE}
 )
 
 vcpkg_install_cmake()
