@@ -4,7 +4,7 @@
   "port-version": 2,
   "description": "The Python programming language",
   "homepage": "https://github.com/python/cpython",
-  "supports": "!(arm | uwp)",
+  "supports": "!(arm | uwp) & !(windows & static)",
   "dependencies": [
     {
       "name": "bzip2",
